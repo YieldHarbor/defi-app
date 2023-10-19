@@ -5,7 +5,7 @@ import { PACKAGE_ID, TREASURY_CAP, RESERVE, MARKETPLACE, TYPE } from '@/constant
 import { Ed25519Keypair, JsonRpcProvider, testnetConnection, RawSigner, TransactionBlock } from '@mysten/sui.js';
 import { useEffect, useState } from 'react';
 
-const useLegato = () => {
+const useYieldHarbor = () => {
 
     const wallet = useWallet();
 
@@ -376,4 +376,4 @@ const useLegato = () => {
     }
 }
 
-export default useLegato
+export default useYieldHarbor
