@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  .wkit-button {
+    background: transparent;
+    font-size: 14px; 
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 7px;
+    background: linear-gradient(135deg, #00feba, #c385de);
+    margin-bottom: auto;
+  }
+
+  .wkit-connected-container {
+    background: linear-gradient(135deg, #00feba, #c385de);
+    margin-left: auto;
+    padding-top: 3px;
+  }
+  .wkit-connected-button { 
+    
+    font-size: 14px;  
+    padding: 10px;
+    margin-top: 7px;
+    margin-bottom: auto;
+  }
+  .wkit-connected-button__balance {
+    color: white;
+    font-size: 14px;
+    display: none;
+  }
+  .wkit-connected-button__divider {
+    display: none;
+  }
+  .wkit-address-select__address {
+    color: white;
+    font-size: 14px;
+  }
+  .wkit-address-select__right-arrow {
+    color: white;
+  }
+  
+}
