@@ -1,68 +1,71 @@
-# YieldHarbor Finance
+YieldHarbor Finance is a decentralized financial protocol designed for the Sui blockchain. It allows users to tokenize their liquid staking assets, providing them with more flexible options for managing their staked assets and capitalizing on market volatility. Here's an overview of YieldHarbor Finance, its components, and how it works:
 
-YieldHarbor is a permissionless yield tokenization protocol for liquid staking assets on Sui blockchain that enables new strategies for staking and provides additional tools for users to capitalize on market volatility. Stakers can hedge their risk by lock in today's APR rate and selling their yield in advance. Non-stakers can perform arbitrage on the APYs by trading these future yield tokens through our exchange platform.
+## Protocol Overview
 
-The system has two types of derivative tokens created by the timelock vault. The first type is for stakers who want to lock in their yield. They must deposit liquid staking assets and will receive principal tokens, which include future yield. They can then either wait until the vault matures to redeem their deposit or sell it on the marketplace, possibly at a discount to attract other buyers.
+- Permissionless Yield Tokenization: YieldHarbor is a permissionless protocol that enables users to tokenize their liquid staking assets on the Sui blockchain.
 
-The second type is the yield token, which allows anyone to speculate on APR volatility. Holders of yield tokens will be able to claim yield from the surplus when the APR is on the rise.
+- Staking Strategies: YieldHarbor introduces new strategies for staking, allowing users to hedge their risk by locking in today's APR rate and selling their yield in advance.
+
+- Arbitrage Opportunities: Non-stakers can perform arbitrage by trading future yield tokens on YieldHarbor's exchange platform.
+
+## Derivative Tokens
+
+YieldHarbor introduces two types of derivative tokens created by the timelock vault:
+
+1. Principal Tokens (HYT): These tokens are for stakers who want to lock in their yield. Stakers deposit liquid staking assets and receive principal tokens, which include future yield. They can either wait until the vault matures to redeem their deposit or sell it in the marketplace.
+
+2. Yield Tokens (YT): These tokens allow anyone to speculate on APR volatility. Holders of yield tokens can claim yield from the surplus when the APR is on the rise.
 
 ## Background
 
-The first version aims to support Staked SUI objects, a new asset class introduced after the SIP-6 updates. When stakers stake SUI tokens with a validator, they receive Staked SUI objects as receipts. These objects can be traded and transferred to someone else but with certain restrictions. Staked SUI objects are considered semi-NFT, which means an object obtained from Pool A cannot be merged with one from Pool B.
+YieldHarbor initially supports Staked SUI objects, a new asset class introduced after SIP-6 updates. Staked SUI objects are semi-NFTs obtained when stakers stake SUI tokens with a validator. These objects can't be merged across different pools, and their rewards vary among pools.
 
-As staking rewards differ among different staking pools, we cannot directly convert Staked SUI objects into fungible tokens. Therefore, we need a solution that can efficiently consolidate staking rewards from various pools into a reliable average APR across all staking pools and must have a mechanism to ensure the accuracy of APR over time.
+To consolidate rewards from different staking pools efficiently and determine an accurate average APR, YieldHarbor employs a unique mechanism.
 
-## Principal Token
+## Principal Token (HYT)
 
-The Principal Token is the primary token serving token holders who seek to lock up their APR at today's rates. For example, if you are holding a Staked SUI object with a 4% APR, you will need to wait 1 year to receive a profit of 4%.
+- Principal Tokens (HYT) represent liquid staking assets and future yield.
+- HYT tokens are created in timelock vaults with fixed maturity dates.
+- Before maturity, the vault accumulates yield from the staking protocol or validator node, ensuring that HYT holders can redeem assets at a 1:1 ratio when the vault matures.
+- A shared function can be executed to unstake locked Staked SUI objects, add rewards to the pool, and restake remaining Staked SUI objects if the APR remains fixed.
 
-YieldHarbor provides timelock vaults, each with a fixed maturity date. It can tokenize liquid staking assets along with future yield into fungible derivative tokens called HYT that can be traded on any decentralized exchange and/or partially transferred to anyone.
+## Marketplace for HYT
 
-Before the vault matures, it accumulates yield from the staking protocol or validator node to provide coverage for all distributed HYT tokens. This ensures that when the vault matures, HYT holders can redeem the locked assets back at a 1:1 ratio.
+- HYT is a fungible token that can be traded on any exchange, including YieldHarbor's marketplace.
+- Sellers can set discounts to attract buyers, making an orderbook-based system more suitable.
 
-In the details of the timelock vault for Staked SUI objects, there will be a shared function that anyone can call. When this function is executed, the vault will unstake all locked Staked SUI objects for SUI tokens and rewards. The rewards will be added to the reward pool and the remaining Staked SUI objects will be restaked on the validator node.
+## Burning Process for HYT
 
+- When the vault matures, HYT token holders can redeem their assets at a 1:1 ratio.
+- If the vault hasn't matured, exiting the position requires acquiring YT tokens equivalent to the remaining future yield not yet acquired by the vault.
 
-If the APR remains fixed until the vault matures, all SUI tokens in the reward pool will cover all the future yield that has been minted as HYT earlier. However, this scenario is unlikely. To sustain the reward supply with dynamic yield, we'll depend on the yield token, which will be explained in the next section.
+## Yield Token (YT)
 
-### Marketplace
+- YT tokens help stabilize the reward pool and ensure sufficient assets for stakers.
+- YT tokens are minted at the time of vault generation and supply liquidity to the AMM's pool.
+- YT primarily targets speculators interested in APR changes.
+- YT holders can claim excess yields during APR uptrends, converting LP tokens into rewards during downtrends.
 
-HYT is a fungible token that can be traded on any exchange, including YieldHarbor's marketplace, which we have prepared with an orderbook-based system for users. Since HYT represents the future value of Staked SUI, sellers may have the option to set a discount to attract potential buyers and the AMM may not be suitable for this purpose.
+## Marketplace for YT
 
-### Burning Process
-
-The burning of HYT tokens can be broken down into two scenarios, before and after the vault matures.
-
-When the vault matures, HYT token holders can redeem the original assets at a 1:1 ratio. However, if the vault has not matured, to exit the position, you must acquire YT tokens equivalent to the remaining future yield not yet acquired by the vault.
-
-## Yield Token
-
-The yield token is a support token that helps stabilize the reward pool and ensures it has sufficient assets to return to the staker. Each vault has its own set of YT tokens, and the entire supply will be minted at the time of vault generation and instantly topping up the AMM's liquidity pool.
-
-YT primarily targets individuals interested in speculating on APR. During an uptrend in APR, YT holders can claim excess yields at their convenience until the vault matures. During APR declines, LP tokens are converted into rewards to cover HYT holder yields. In fact, liquidity providers profit during rising APR conditions but may face losses during downturns.
-
-### Marketplace
-
-YT utilizes an AMM for instant trading of YT tokens without the need to wait for someone to create orders. The token price is determined by supply and demand.
-
-### Burning Process
-
-There is no burning process for YT.
-
-## Repository structure
-
-The project using a monorepo structure consists of 2 packages using [Lerna](https://lerna.js.org).
-
-- `client`: the frontend application made with [React](https://react.dev/), TailwindCSS, Sui.js and Suiet's wallet-kit
-- `move`: contains Move-based smart contracts
+- YT utilizes an AMM for instant trading without order creation, with token price determined by supply and demand.
 
 ## Contract Overview
 
-- `staked_sui.move` - A mock Staked SUI object for testing on the Testnet system.
-- `vault.move` - The timelock vault, 1 mil. yield tokens (YT) will be minted and sent to the AMM object for YT circulation at the time of generation. Principal tokens (HYT) will be minted when a staker deposits the Staked SUI object into the vault plus additional HYT estimated to be generated until the vault matures, as per the APR stated in the Oracle contract.
-- `oracle.move` - The Oracle contract, only authorized wallets can update the APR value observed from an external source and update on every epoch.
-- `marketplace.move` - An Orderbook-based marketplace for trading HYT.
-- `amm.move` - An AMM-based marketplace for trading YT.
+The project employs a monorepo structure with two packages:
+
+- `client`: The frontend application built with React, TailwindCSS, Sui.js, and Suiet's wallet-kit.
+- `move`: Contains Move-based smart contracts for the protocol's core functionality.
+
+Key smart contracts include:
+
+- `staked_sui.move`: A mock Staked SUI object for testing on the Testnet system.
+- `vault.move`: The timelock vault that mints HYT and manages principal tokens.
+- `oracle.move`: The Oracle contract for APR value updates.
+- `marketplace.move`: An orderbook-based marketplace for trading HYT.
+- `amm.move`: An AMM-based marketplace for trading YT tokens.
+
+YieldHarbor Finance offers a comprehensive ecosystem for managing liquid staking assets and capitalizing on APR fluctuations on the Sui blockchain.
 
 ## Getting started
 
