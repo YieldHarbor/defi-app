@@ -98,7 +98,7 @@ Deployment transaction link - https://suiexplorer.com/txblock/9SJwNA4y7iBXmi7GVV
 | ------- | ------------------------------------------------------------------ |
 | Package | 0x6ceb18571138274cb926f9a5004b73a66b8581403b655696a38d71d6e5e0ec1d |
 
-| Vault   | 0x50c6f8cf9745a96a7f066afa00633fc06b6f6c33ba7aba4c49de521f07eacf4c |
+| Vault   | 0xd2cbc949e7ea2de2ffc6b77c9e5d900be21986a7afa002d677e2cb39839ffc1a |
 
 Sui Devnet Deployment
 [![Sui Devnet Deployment](./images/deploy.png)]()
